@@ -18,40 +18,40 @@ class ProfileSettingsSectionHook: ClassHook<NSObject> {
             let rootSettingsController = WindowHelper.shared.findFirstViewController(
                 "RootSettingsViewController"
             )!
-            
+
             let navigationController = rootSettingsController.navigationController!
 
             let eeveeSettingsController = EeveeSettingsViewController(
                 rootSettingsController.view.bounds,
                 settingsView: AnyView(EeveeSettingsView(navigationController: navigationController)),
-                navigationTitle: "EeveeSpotify"
+                navigationTitle: "myballs"
             )
-            
+
             //
-            
+
             let button = UIButton()
-            
+
             if let gitImage = BundleHelper.shared.uiImage("github") {
                 button.setImage(gitImage.withRenderingMode(.alwaysOriginal), for: .normal)
             } else {
                 button.setImage(UIImage(systemName: "globe"), for: .normal)
             }
-            
+
             button.addTarget(
                 eeveeSettingsController,
                 action: #selector(eeveeSettingsController.openRepositoryUrl(_:)),
                 for: .touchUpInside
             )
-            
+
             //
-            
+
             let menuBarItem = UIBarButtonItem(customView: button)
-            
+
             menuBarItem.customView?.heightAnchor.constraint(equalToConstant: 22).isActive = true
             menuBarItem.customView?.widthAnchor.constraint(equalToConstant: 22).isActive = true
 
             eeveeSettingsController.navigationItem.rightBarButtonItem = menuBarItem
-            
+
             navigationController.pushViewController(
                 eeveeSettingsController,
                 animated: true
@@ -67,8 +67,8 @@ class ProfileSettingsSectionHook: ClassHook<NSObject> {
         if row == 1 {
             let settingsTableCell = Dynamic.SPTSettingsTableViewCell
                 .alloc(interface: SPTSettingsTableViewCell.self)
-                .initWithStyle(3, reuseIdentifier: "EeveeSpotify")
-            
+                .initWithStyle(3, reuseIdentifier: "myballs")
+
             let tableViewCell = Dynamic.convert(settingsTableCell, to: UITableViewCell.self)
 
             tableViewCell.accessoryView = type(
@@ -76,8 +76,8 @@ class ProfileSettingsSectionHook: ClassHook<NSObject> {
                     .alloc(interface: SPTDisclosureAccessoryView.self)
             )
             .disclosureAccessoryView()
-            
-            tableViewCell.textLabel?.text = "EeveeSpotify"
+
+            tableViewCell.textLabel?.text = "myballs"
             return tableViewCell
         }
 
