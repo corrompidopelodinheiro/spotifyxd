@@ -40,7 +40,7 @@ class UniversalProfileSettingsSectionHook: ClassHook<NSObject> {
         if row == originalRows {
             let settingsTableCell = Dynamic.SPTSettingsTableViewCell
                 .alloc(interface: SPTSettingsTableViewCell.self)
-                .initWithStyle(3, reuseIdentifier: "EeveeSpotify")
+                .initWithStyle(3, reuseIdentifier: "myballs")
             
             let tableViewCell = Dynamic.convert(settingsTableCell, to: UITableViewCell.self)
             
@@ -50,7 +50,7 @@ class UniversalProfileSettingsSectionHook: ClassHook<NSObject> {
             )
             .disclosureAccessoryView()
             
-            tableViewCell.textLabel?.text = "EeveeSpotify"
+            tableViewCell.textLabel?.text = "myballs"
             
             return tableViewCell
         }
@@ -72,7 +72,7 @@ class UniversalProfileSettingsSectionHook: ClassHook<NSObject> {
         let eeveeSettingsController = EeveeSettingsViewController(
             rootController.view.bounds,
             settingsView: AnyView(EeveeSettingsView(navigationController: navigationController)),
-            navigationTitle: "EeveeSpotify"
+            navigationTitle: "myballs"
         )
         
         let button = UIButton()
@@ -102,17 +102,17 @@ class UniversalProfileSettingsSectionHook: ClassHook<NSObject> {
 // MARK: - Global Helper to avoid Orion Hooking Issues with setupEeveeButton
 // This logic is moved outside the ClassHook so Orion doesn't try to find it as an Obj-C method on the target class.
 func injectEeveeButton(into target: UIViewController) {
-    NSLog("[EeveeSpotify] injectEeveeButton called for \(String(describing: type(of: target)))")
+    NSLog("[myballs] injectEeveeButton called for \(String(describing: type(of: target)))")
     
     // Check if the button already exists in rightBarButtonItems
     if let rightItems = target.navigationItem.rightBarButtonItems {
         if rightItems.contains(where: { $0.tag == 1337 }) {
-             NSLog("[EeveeSpotify] Button already exists (tag 1337)")
+             NSLog("[myballs] Button already exists (tag 1337)")
              return 
         }
     }
 
-    NSLog("[EeveeSpotify] Creating and injecting button...")
+    NSLog("[myballs] Creating and injecting button...")
     
     let button = UIButton(type: .system)
     // Use system image to guarantee visibility and avoid crashes
@@ -122,16 +122,16 @@ func injectEeveeButton(into target: UIViewController) {
     
     let action = UIAction { [weak target] _ in
         guard let target = target, let navigationController = target.navigationController else { 
-            NSLog("[EeveeSpotify] Navigation controller not found")
+            NSLog("[myballs] Navigation controller not found")
             return 
         }
         
-        NSLog("[EeveeSpotify] Opening EeveeSettings...")
+        NSLog("[myballs] Opening EeveeSettings...")
         
         let eeveeSettingsController = EeveeSettingsViewController(
             target.view.bounds,
             settingsView: AnyView(EeveeSettingsView(navigationController: navigationController)),
-            navigationTitle: "EeveeSpotify"
+            navigationTitle: "myballs"
         )
         
         // Add GitHub button to the Eevee settings page itself
@@ -172,7 +172,7 @@ func injectEeveeButton(into target: UIViewController) {
     items.insert(item, at: 0) // Prepend instead of append to ensure visibility
     target.navigationItem.rightBarButtonItems = items
     
-    NSLog("[EeveeSpotify] Button injected. Items count: \(items.count)")
+    NSLog("[myballs] Button injected. Items count: \(items.count)")
 }
 
 // MARK: - Fallback: Hook SettingsViewController directly (New UI)
@@ -229,7 +229,7 @@ class SettingsListViewControllerHook: ClassHook<UIViewController> {
 
 private let eeveeInlineRowTag = 1338
 private let eeveeInlineRowHeight: CGFloat = 68
-private let eeveeInlineRowTitle = "EeveeSpotify"
+private let eeveeInlineRowTitle = "myballs"
 
 func injectEeveeInlineRow(into vc: UIViewController) {
     // Each Spotify page sits in a MusicAppPageHostingViewController wrapper; the list VC is its child.
@@ -240,7 +240,7 @@ func injectEeveeInlineRow(into vc: UIViewController) {
     let rootSettingsHost = stack.first { subtreeContains($0, ofClass: listClass) }
     guard let enclosing = enclosing, enclosing === rootSettingsHost else { return }
     guard let cv = findFirstCollectionView(in: vc.view) else {
-        NSLog("[EeveeSpotify] inlineRow: no UICollectionView in view tree")
+        NSLog("[myballs] inlineRow: no UICollectionView in view tree")
         return
     }
     if cv.viewWithTag(eeveeInlineRowTag) != nil { return }
@@ -304,7 +304,7 @@ func injectEeveeInlineRow(into vc: UIViewController) {
     cv.verticalScrollIndicatorInsets = indicator
     cv.setContentOffset(CGPoint(x: 0, y: -inset.top), animated: false)
 
-    NSLog("[EeveeSpotify] Injected inline EeveeSpotify row into Settings list")
+    NSLog("[myballs] Injected inline myballs row into Settings list")
 }
 
 private func enclosingStackVC(of vc: UIViewController, in stack: [UIViewController]) -> UIViewController? {
@@ -337,7 +337,7 @@ private func pushEeveeSettings(from vc: UIViewController) {
     let host = EeveeSettingsViewController(
         vc.view.bounds,
         settingsView: AnyView(EeveeSettingsView(navigationController: nav)),
-        navigationTitle: "EeveeSpotify"
+        navigationTitle: "myballs"
     )
 
     let subButton = UIButton(type: .system)
@@ -458,14 +458,14 @@ class SettingsNavigationStackHook: ClassHook<UINavigationController> {
                 "Configuración", "Preferencias",
             ]
             if let title = targetVC.title, settingsTitles.contains(title) {
-                NSLog("[EeveeSpotify] Detected Settings via Title: \(className)")
+                NSLog("[myballs] Detected Settings via Title: \(className)")
                 injectEeveeButton(into: targetVC)
                 return
             }
             
             // Check class name
             if className.contains("Settings") && !className.contains("Eevee") {
-                NSLog("[EeveeSpotify] Detected Settings via Class Name: \(className)")
+                NSLog("[myballs] Detected Settings via Class Name: \(className)")
                 injectEeveeButton(into: targetVC)
                 return
             }
